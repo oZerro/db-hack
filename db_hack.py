@@ -18,26 +18,19 @@ def get_schoolkid(name):
     while True:
         try:
             schoolkid = Schoolkid.objects.get(full_name__contains=name)
+            return schoolkid
         except (Schoolkid.DoesNotExist, Schoolkid.MultipleObjectsReturned) as ex:
-            print("Укажите имя и фамилию или полное ФИО")
-        finally:
-            if schoolkid:
-                break
+            raise ex
 
-    return schoolkid
 
 
 def get_subject(subject, schoolkid):
     while True:
         try:
             subject = Subject.objects.get(title=subject, year_of_study=schoolkid.year_of_study)
+            return subject
         except (Subject.DoesNotExist, Subject.MultipleObjectsReturned) as ex:
-            print("Проверьте переданные вами данные: Название предмета, объект школьника.")
-        finally:
-            if subject:
-                break
-
-    return subject
+            raise ex
 
 
 def create_commendation(name, subject):
