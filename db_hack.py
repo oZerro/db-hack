@@ -5,7 +5,8 @@ RECOMMENDATIONS = [
     'Хвалю!', 'Молодец!', 'Отличная работа!', 'Справился лучше всех!'
 ]
 
-def fix_marks(schoolkid):
+def fix_marks(name):
+    schoolkid = get_schoolkid(name)
     Mark.objects.filter(schoolkid=schoolkid.id, points__in=[2,3]).update(points=5)
 
 
@@ -14,23 +15,21 @@ def remove_chastisements(schoolkid):
     schoolkid_chastisements.delete()
 
 
-def get_schoolkid(name):
-    while True:
-        try:
-            schoolkid = Schoolkid.objects.get(full_name__contains=name)
-            return schoolkid
-        except (Schoolkid.DoesNotExist, Schoolkid.MultipleObjectsReturned) as ex:
-            raise ex
+def get_schoolkid(name):   
+    try:
+        schoolkid = Schoolkid.objects.get(full_name__contains=name)
+        return schoolkid
+    except (Schoolkid.DoesNotExist, Schoolkid.MultipleObjectsReturned) as ex:
+        raise ex
 
 
 
 def get_subject(subject, schoolkid):
-    while True:
-        try:
-            subject = Subject.objects.get(title=subject, year_of_study=schoolkid.year_of_study)
-            return subject
-        except (Subject.DoesNotExist, Subject.MultipleObjectsReturned) as ex:
-            raise ex
+    try:
+        subject = Subject.objects.get(title=subject, year_of_study=schoolkid.year_of_study)
+        return subject
+    except (Subject.DoesNotExist, Subject.MultipleObjectsReturned) as ex:
+        raise ex
 
 
 def create_commendation(name, subject):
